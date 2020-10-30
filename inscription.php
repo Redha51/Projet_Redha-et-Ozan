@@ -1,25 +1,53 @@
 <?php
-require_once('Views/partials/head.php');
-require_once('libraries/Models/CoreModels.php');
-require_once('libraries/Models/UserModel.php');
-?>
 
+require_once('Views/partials/head.php');
+require_once('libraries/autoload.php');
+?>
 <form method="post" action="">
-<fieldset>
-<legend>Registration</legend>
-<p>
-<label for="Lastname">Lastname :</label><input name="lastname" type="text" id="lastname" required/><br />
-<label for="Firstname">Firstname :</label><input name="firstname" type="text" id="firstname" required/><br />
-<label for="Birhday">Birthday :</label><input name="birthday" type="date" id="birthday" required/><br />
-<label for="Email">Mail :</label><input name="email" type="text" id="email" /><br required/>
-<label for="Password">Mot de Passe :</label><input type="password" name="password" id="password" required/>
-</p>
-</fieldset>
-<p><input type="submit" value="Sign in" /></p></form>
+<div class="container">
+    <div class="row">
+        <div class="col m10 offset-m1 s12">
+            <h2 class="center-align">Registration</h2>
+            <div class="row">
+                <form class="col m8 offset-m2 s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input name="lastname" type="text"  class="form-input">
+                            <label for="lastname">Lastname</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input name="firstname" type="text" class="form-input">
+                            <label for="firstname">Firstname</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input name="birthday" type="text" class="datepicker">
+                            <label for="birthday">Birthday</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input name="email" type="email" class="form-input">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input name="password" type="password" class="form-input">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <label>
+                                <input type="checkbox" id="checkbox" onclick="activation()"/>
+                                <span>J'accepte la RGPD</span>
+                            </label>
+                        </div>
+                    </div>
+<div class="row">
+    <div class="col m6">
+    <p class="right-align"><button id="sendbtn" class="btn waves-effect waves-light right-align" type="submit">Sign in
+  </button></p>
+    </div>
+</div>
 
 <?php
 if(isset($_POST['lastname']) && isset($_POST['firstname']) && isset($_POST['birthday'])
-   && isset($_POST['email']) && isset($_POST['password']) ):
+   && isset($_POST['email']) && isset($_POST['password'])):
     $user = new User();
     $user->setLastName($_POST['lastname']);
     $user->setFirstName($_POST['firstname']);
@@ -27,8 +55,11 @@ if(isset($_POST['lastname']) && isset($_POST['firstname']) && isset($_POST['birt
     $user->setEmail($_POST['email']);
     $user->setPassword($_POST['password']);
     $user->register();
-    echo "Vous avez été enregistré !";
-endif;
+    header("refresh:2 ;url='Connexion.php'");
+    var_dump($_POST['birthday']);
+        
+    endif;
+
+
+require_once('Views/partials/footer.php');
 ?>
-    
-</div>

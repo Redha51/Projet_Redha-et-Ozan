@@ -1,5 +1,5 @@
 <?php
-require_once('libraries/Models/CoreModels.php');
+require_once('libraries/Models/CoreModel.php');
 require_once('libraries/Models/UserModel.php');
 ?>
 <!DOCTYPE html>
@@ -7,11 +7,13 @@ require_once('libraries/Models/UserModel.php');
 <head>
     <meta charset="UTF-8" />
     <title><?=$pageTitle?></title>
+    <link rel="stylesheet" href="/Projet_Redha/css/style.css" type="text/css">
     <link rel="stylesheet" href="/Projet_Redha/css/materialize.min.css" type="text/css">
-    <script src="/Projet_Redha/js/materialize.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
 </head>
 <body>
+    
 <header>
 <?php 
     $user = new User();

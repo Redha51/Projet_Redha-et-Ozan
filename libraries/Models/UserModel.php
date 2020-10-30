@@ -1,7 +1,7 @@
 <?php
 
 require_once('libraries/Utils/Database.php');
-require_once('libraries/Models/CoreModels.php');
+require_once('libraries/Models/CoreModel.php');
 
 class User extends CoreModel {
 
@@ -14,7 +14,11 @@ class User extends CoreModel {
     protected $create_at;
 
     // Création d'un user
+
     public function register (){
+        if(!empty($this->firstName) && !empty($this->lastName) && !empty($this->email)
+        && !empty($this->password) && !empty($this->birthday)):
+            if($this->verifMail($this->email) < 1):
         $query='INSERT INTO user VALUES(0,
                                     :user_firstname,
                                     :user_lastname,
@@ -26,8 +30,14 @@ class User extends CoreModel {
                                ':user_lastname'=>$this->getLastname(),
                                ':user_email'=>$this->getEmail(),
                                ':user_password'=>$this->getPassword(),
-                               ':user_birthday'=>$this->getBirthday(),
+                               ':user_birthday'=>$this->getBirthday()
                                 ));
+            echo 'Vous avez été enregistré !(Redirection)';
+            else:
+                echo 'Cette email existe déjà';
+            endif;
+                endif;
+                                
     }
     
     // Concordance entre le Mail et le Mdp
@@ -43,14 +53,14 @@ class User extends CoreModel {
             $final=$result->fetch();
             unset($final["user_password"]);
             unset($final[4]);
-            var_dump($final);
             if($final):
                 $_SESSION['isConnected'] = $final;
+                header("refresh:2 ;url='indexAccount.php'");
                 echo "Vous êtes connecté !";
-            else:
-                echo "Données Invalide";
             return $final;
-            endif;
+            else:
+                echo 'Données Invalides';
+        endif; 
         }
         
         public static function isConnected(){
@@ -62,10 +72,28 @@ class User extends CoreModel {
             return $connected;
         }
 
-        // Pour rendre un email unique
+        public static function secureAcces(){
+            if (empty($_SESSION)):
+                header('location:index.php');
+                exit();
+            endif;
+        }
 
-        public function verifMail($email){
-            $query='SELECT COUNT(user_email) FROM user WHERE user_email=:email';
+        public function getUserId(){
+            return $this->id;
+        }
+
+        public function changeEmail($id, $email){
+            $query="UPDATE user set user_email='$email' WHERE user_id='$id'";
+            $result=$this->pdo->prepare($query);
+            $result->bindParam("user_email", $email, PDO::PARAM_STR);
+            $result->execute();
+        }
+
+         // Pour rendre un email unique
+
+         public function verifMail($email){
+            $query='SELECT user_email FROM user WHERE user_email=:email';
             $result=$this->pdo->prepare($query);
             $result->execute(array(':email'=>$email));
             $final=$result->fetch();
@@ -73,17 +101,13 @@ class User extends CoreModel {
             
         }
 
-        public function getId(){
-            return $this->id;
-        }
-
         public function setEmail($email){
-          if($this->verifMail($email)):
+        if(!empty($email)):
                 $this->email=$email;
-                return $this;
-        else:
-           echo 'Cette email existe déjà';
-            endif;
+                return $this->email;
+            else:
+            echo 'Veuillez renseignez un email <br>';
+        endif;
         }
 
         public function getEmail(){
@@ -91,8 +115,15 @@ class User extends CoreModel {
         }
 
         public function setLastName($lastName){
-            $this->lastName=$lastName;
-            return $this;
+            var_dump($lastName);
+            if(!empty($lastName) && !preg_match("~[0-9]~",$lastName)):
+                $this->lastName = $lastName;
+                return $this->lastName;
+            elseif(empty($lastName)):
+                echo 'Veuillez mettre un lastname <br>';
+            else:
+                echo 'Le lastname ne peut pas contenir de chiffre <br>';
+            endif;
         }
 
         public function getLastName(){
@@ -100,24 +131,53 @@ class User extends CoreModel {
         }
 
         public function setFirstName($firstName){
-            $this->firstName=$firstName;
-            return $this;
+            if(!empty($firstName) && !preg_match("~[0-9]~",$firstName)):
+                $this->firstName = $firstName;
+                return $this->firstName;
+            elseif(empty($firstName)):
+                echo 'Veuillez mettre un Firstname <br>';
+            else:
+                echo 'Le firstname ne peut pas contenir de chiffre <br>';
+            endif;
         }
 
         public function getFirstName(){
             return $this->firstName;
         }
 
-        public function setPassword($password){
-            if  (strlen($password) >= 6 
-                && strtolower($password) != ($password) 
-                && strtoupper($password) != ($password)):
-                $this->password=$password;
-                return $this->password;
+        public function changePassword($id, $password, $oldpassword){
+            $query="SELECT user_password
+                    FROM user
+                    WHERE user_password=SHA2('$oldpassword',512)";
+            $result=$this->pdo->prepare($query);
+            $result->bindParam("user_password", $oldpassword, PDO::PARAM_STR);
+            $result->execute();
+            $final=$result->fetch();
+            if($final == TRUE):
+                $query2="UPDATE user SET user_password=SHA2('$password',512) WHERE user_id='$id'";
+                $result2=$this->pdo->prepare($query2);
+                $result2->bindParam("user_password", $password, PDO::PARAM_STR);
+                $result2->execute();
+                echo 'Mot de passe changé';
             else:
-                echo '<p class="alert alert-danger" role="alert">Le mot de passe doit avoir au moins 6 caratères, une majuscule,une minuscule !</p>';
+                echo 'Ancien mot de passe incorrecte';
             endif;
             
+        }
+
+        public function setPassword($password){
+            if(!empty($password)):
+                if(strlen($password) >= 6 
+                    && strtolower($password) != ($password) 
+                    && strtoupper($password) != ($password)):
+                    $this->password=$password;
+                    return $this->password;
+                else:
+                    echo 'Le mot de passe doit avoir au moins 6 caratères, une majuscule,une minuscule !';
+                endif;
+            else:
+                echo 'Veuillez renseignez un mot de passe';
+            endif;
         }
 
         public function getPassword(){
@@ -125,8 +185,13 @@ class User extends CoreModel {
         }
 
         public function setBirthday($birthday){
-            $this->birthday=$birthday;
-            return $this->birthday;
+            if(!empty($birthday)):
+                $this->birthday=$birthday;
+                return $this->birthday;
+            else:
+                echo 'Veuillez renseignez votre date de naissance <br>';
+            endif;
+            
         }
 
         public function getBirthday(){

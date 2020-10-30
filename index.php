@@ -1,7 +1,10 @@
 <?php
 session_start();
+session_destroy();
 require_once('Views/partials/head.php');
-require_once('libraries/Models/CoreModels.php');
-require_once('libraries/Models/UserModel.php');
-echo 'Bievenue dans votre espace '. $_SESSION ['isConnected']['user_lastname'].' '.$_SESSION ['isConnected']['user_firstname'];
+
+echo 'Bienvenue dans le site (page statique)';
+
+
+require_once('Views/partials/footer.php');
 ?>

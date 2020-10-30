@@ -9,8 +9,6 @@ CREATE TABLE user(
     user_email VARCHAR(50) NOT NULL,
     user_password VARCHAR(255) NOT NULL,
     user_birthday DATE NOT NULL,
-    user_create_at DATE,
-    user_uptade_at DATE
 );
 
 CREATE TABLE operation(
@@ -20,7 +18,7 @@ CREATE TABLE operation(
     ope_date DATE NOT NULL, 
     ope_comment VARCHAR (255),
     ope_create_at DATE,
-    ope_uptade_at DATE,
+    ope_update_at DATE,
     user_id INT UNSIGNED NOT NULL,
     cate_id INT UNSIGNED NOT NULL,
     payment_id INT UNSIGNED NOT NULL,
@@ -34,12 +32,12 @@ CREATE TABLE categorie (
     cate_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     cate_name VARCHAR (50) NOT NULL,
     cate_create_at DATE,
-    cate_uptade_at DATE
+    cate_update_at DATE
 );
 
 CREATE TABLE payment (
     payment_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    payment_name VARCHAR (50) NOT NULL,
+    payment_type VARCHAR (50) NOT NULL,
     payment_create_at DATE,
-    payment_uptade_at DATE
+    payment_update_at DATE
 );
