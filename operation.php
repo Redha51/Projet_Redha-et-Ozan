@@ -24,6 +24,10 @@ require_once('libraries/autoload.php');
                             </select>
                             <label for="type">Type d'opération</label>
                         </div>
+                        <?php
+                                $catename = new Categorie();
+                                $catename->selectCategorie();
+                            ?>
                         <div class="input-field col s12">
                             <select name="categorie">
                             <option value="" disabled selected>Choisir votre catégorie d'opération</option>

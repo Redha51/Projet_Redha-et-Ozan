@@ -3,12 +3,22 @@
 require_once('libraries/Utils/Database.php');
 require_once('libraries/Models/CoreModel.php');
 
-class Categorie {
+class Categorie extends CoreModel {
 
     protected $id;
     protected $name;
     protected $create_at;
     protected $update_at;
+
+
+    public function selectCategorie(){
+        $query = $this->pdo->query('SELECT name FROM categorie ');
+        $result = $query->fetch();
+        foreach($result as $row){
+            echo $row . '<br>';
+        }
+    }
+
 
     public function getCateId(){
         return $this->id;

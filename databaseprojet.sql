@@ -23,21 +23,20 @@ CREATE TABLE operation(
     cate_id INT UNSIGNED NOT NULL,
     payment_id INT UNSIGNED NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user (user_id),
-    FOREIGN KEY (cate_id) REFERENCES categorie (cate_id),
-    FOREIGN KEY (payment_id) REFERENCES payment (payment_id)
+    FOREIGN KEY (cate_id) REFERENCES categorie (id),
+    FOREIGN KEY (payment_id) REFERENCES payment (id)
 
 );
 
 CREATE TABLE categorie (
-    cate_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    cate_name VARCHAR (50) NOT NULL,
-    cate_create_at DATE,
-    cate_update_at DATE
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR (50) NOT NULL
 );
+
+INSERT INTO 'categorie'  ('id') 'name' VALUES
+(1, 'Loisir');
 
 CREATE TABLE payment (
     payment_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    payment_type VARCHAR (50) NOT NULL,
-    payment_create_at DATE,
-    payment_update_at DATE
+    payment_type VARCHAR (50) NOT NULL
 );

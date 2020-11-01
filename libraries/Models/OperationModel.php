@@ -8,7 +8,7 @@ require_once('libraries/Models/PaymentModel.php');
 
 
 
-class Operation
+class Operation extends CoreModel
 {
 
     protected $id;
@@ -24,20 +24,16 @@ class Operation
     // Création d'une nouvelle opération
     public function newOperation(){
 
-        $user = new User();
-        $cate = new Categorie();
-        $pay = new Payment();
-
         $query='INSERT INTO operation VALUES (0,
-                                              :$ope_amount,
-                                              :$ope_type,
-                                              :$ope_date,
-                                              :$ope_comment,
-                                              :$ope_create_at,
-                                              :$ope_update_at,
-                                              :$user_id,
-                                              :$cate_id,
-                                              :$payment_id)';
+                                              :ope_amount,
+                                              :ope_type,
+                                              :ope_date,
+                                              :ope_comment,
+                                              :ope_create_at,
+                                              :ope_update_at,
+                                              :user_id,
+                                              :cate_id,
+                                              :payment_id)';
         $result=$this->pdo->prepare($query);
         $result->execute(array(':ope_amount'=>$this->getAmount(),
                                ':ope_type'=>$this->getType(),
@@ -45,10 +41,11 @@ class Operation
                                ':ope_comment'=>$this->getComment(),
                                ':ope_create_at'=>$this->getCreate_At(),
                                ':ope_update_at'=>$this->getUpdate_At(),
-                               ':user_id'=>$user->getUserId(),
-                               ':cate_id'=>$cate->getCateId(),
-                               ':payment_id'=>$pay->getPaymentId(),
+                               ':user_id'=>$_SESSION['isConnected']['user_id'],
+                               ':cate_id'=>,
+                               ':payment_id'=>
                                 ));
+                                var_dump($result);
         echo 'Opération validée!';
     }
 

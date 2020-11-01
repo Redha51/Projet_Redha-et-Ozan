@@ -1,4 +1,4 @@
-<footer class="page-footer">
+<!-- <footer class="page-footer">
           <div class="container">
             <div class="row">
               <div class="col l6 s12">
@@ -13,7 +13,7 @@
             <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
             </div>
           </div>
-        </footer>
+        </footer> -->
 </body>
     <script src="/Projet_Redha/js/materialize.min.js"></script>
     <script src="/Projet_Redha/js/jquery-3.5.1.min.js"></script>
