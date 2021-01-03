@@ -1,7 +1,10 @@
 <?php
 session_start();
-session_destroy();
 require_once('Views/partials/head.php');
+$_SESSION["newUser"] = false;
+var_dump($_SESSION['newUser']);
+
+
 ?>
 
 <div class="container">

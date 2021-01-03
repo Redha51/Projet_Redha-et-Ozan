@@ -1,19 +1,22 @@
 // Function pour le select
 $(document).ready(function(){
     $('select').formSelect();
-  });
 
-  // Function pour la date
-$(document).ready(function(){
+    // Function pour la date
     $('.datepicker').datepicker({
       format: 'yyyy/mm/dd',
       selectMonths: true,
     });
-  });
 
-// Function pour la taille max du texte
-jQuery(document).ready(function() {
+    // Function pour l'alerte inscription
+    $('#alert_close').click(function(){
+      $( "#alert_box" ).fadeOut( "slow", function() {
+      });
+    });
+
+    // Function pour la taille max du texte
     jQuery('textarea#comment').characterCounter();
+
   });
   
 // Function pour le sidebar
@@ -36,6 +39,7 @@ function activation(){
         btn.disabled = true;
     }
 }
+
 
 
 

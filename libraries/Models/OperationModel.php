@@ -36,34 +36,117 @@ class Operation extends CoreModel
                                               :payment_id)';
         $result=$this->pdo->prepare($query);
         $result->execute(array(':ope_amount'=>$this->getAmount(),
-                               ':ope_type'=>$this->getType(),
+                               ':ope_type'=>$_POST['type'],
                                ':ope_date'=>$this->getDate(),
                                ':ope_comment'=>$this->getComment(),
                                ':ope_create_at'=>$this->getCreate_At(),
                                ':ope_update_at'=>$this->getUpdate_At(),
                                ':user_id'=>$_SESSION['isConnected']['user_id'],
-                               ':cate_id'=>,
-                               ':payment_id'=>
+                               ':cate_id'=>$_POST['categorie'],
+                               ':payment_id'=>$_POST['payment']
                                 ));
-                                var_dump($result);
-        echo 'Opération validée!';
+        echo '<div class="row" id="alert_box">
+        <div class="col s12 m12">
+        <div class="card green darken-1">
+        <div class="row">
+                <div class="col s12 m10">
+                <div class="card-content white-text">
+                <p>Votre opération à été enregistré avec succès !</p>
+                <div class="col s10 m2">
+                <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>';
     }
 
-    public function findOperation($date) {
-        $query="SELECT * FROM operation WHERE ope_date = '$date'";
+    // Pour afficher les opérations
+    public function viewOperation(){
+        $query="SELECT ope_amount,type.ope_type,categorie.name,
+                       payment_type,ope_date,
+                       ope_comment,ope_id
+                FROM operation
+                INNER JOIN type
+                    ON type.type_id = operation.type_id
+                INNER JOIN categorie
+                    ON categorie.id = operation.cate_id
+                INNER JOIN payment
+                    ON payment.payment_id = operation.payment_id
+                ORDER BY ope_date DESC";
         $result=$this->pdo->prepare($query);
-        $result->bindParam("ope_date", $date, PDO::PARAM_STR);
+        $result->execute();
+        $table=$result->fetchAll();
+        // var_dump($table);
+        // die();
+        $aff="";
+        echo "<table class='responsive-table'>
+        <thead>
+          <tr>
+              <th>Montant de l'opération</th>
+              <th>Type de l'opération</th>
+              <th>Catégorie opération</th>
+              <th>Type de paiement</th>
+              <th>Date de l'opération</th>
+              <th>Commentaire</th>
+          </tr>
+        </thead>
+        <tbody>";
+            foreach ($table as $value):
+                $aff.="<tr>
+            <td>".$value[0]."</td>
+            <td>".$value[1]."</td>
+            <td>".$value[2]."</td>
+            <td>".$value[3]."</td>
+            <td>".$value[4]."</td>
+            <td>".$value[5]."</td>
+            <td>
+            <form action='operationModif.php' method='post'>
+                    <input type='hidden' value=".$value[6]." name='modifOp'/>
+                    <button type='submit' name='modif'>Modifier</button>
+            </form>
+            <form action='' method='post'>
+                    <input type='hidden' value=".$value[6]." name='delOp'/>
+                    <button type='submit' name='delete'>Supprimer</button>
+            </form>
+            
+          
+            </td>
+            </tr>";
+        endforeach;
+        return $aff;
+        echo "</tbody>
+            </table>";     
+    }
+
+    public function findOperationById($id) {
+        $query="SELECT * FROM operation WHERE ope_id = '$id'";
+        $result=$this->pdo->prepare($query);
+        $result->bindParam("ope_id", $id, PDO::PARAM_STR);
         $result->execute();
         $final=$result->fetch();
+        return $final;
+
     }
+
+    public function updateOperation($id){
+        // $query="UPDATE operation SET user_password=SHA2('$password',512) WHERE user_id='$id'";
+        //         $result2=$this->pdo->prepare($query2);
+        //         $result2->bindParam("user_password", $password, PDO::PARAM_STR);
+        //         $result2->execute();
+    }
+
+
+    
 
     public function deleteOperation($id){
 
-        $query="DELETE FROM operation WHERE operation_id ='$id'";
+        $query="DELETE FROM operation WHERE ope_id ='$id'";
         $result=$this->pdo->prepare($query);
-        $result->bindParam("operation_id", $id, PDO::PARAM_STR);
+        $result->bindParam("ope_id", $id, PDO::PARAM_STR);
         $result->execute();
-        $final=$result->fetch();
     }
 
     public function getId(){

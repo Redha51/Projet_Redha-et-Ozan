@@ -1,9 +1,26 @@
 <?php
-
+session_start();
 require_once('Views/partials/head.php');
 require_once('libraries/autoload.php');
+
+$_SESSION["newUser"] = false;
+var_dump($_SESSION['newUser']);
+
+if(isset($_POST['lastname']) && isset($_POST['firstname']) && isset($_POST['birthday'])
+   && isset($_POST['email']) && isset($_POST['password'])):
+    $user = new User();
+    $user->setLastName($_POST['lastname']);
+    $user->setFirstName($_POST['firstname']);
+    $user->setBirthday($_POST['birthday']);
+    $user->setEmail($_POST['email']);
+    $user->setPassword($_POST['password']);
+    $user->register();
+    
+    var_dump($_POST['birthday']);
+endif;
 ?>
-<form method="post" action="">
+
+<form method="post" action="#">
 <div class="container">
     <div class="row">
         <div class="col m10 offset-m1 s12">
@@ -38,28 +55,14 @@ require_once('libraries/autoload.php');
                             </label>
                         </div>
                     </div>
-<div class="row">
-    <div class="col m6">
-    <p class="right-align"><button id="sendbtn" class="btn waves-effect waves-light right-align" type="submit">Sign in
-  </button></p>
+    <div class="row">
+        <div class="col m6">
+        <p class="right-align"><button id="sendbtn" class="btn waves-effect waves-light right-align" type="submit">Sign in
+    </button></p>
+        </div>
     </div>
-</div>
+</form>
 
 <?php
-if(isset($_POST['lastname']) && isset($_POST['firstname']) && isset($_POST['birthday'])
-   && isset($_POST['email']) && isset($_POST['password'])):
-    $user = new User();
-    $user->setLastName($_POST['lastname']);
-    $user->setFirstName($_POST['firstname']);
-    $user->setBirthday($_POST['birthday']);
-    $user->setEmail($_POST['email']);
-    $user->setPassword($_POST['password']);
-    $user->register();
-    header("refresh:2 ;url='Connexion.php'");
-    var_dump($_POST['birthday']);
-        
-    endif;
-
-
 require_once('Views/partials/footer.php');
 ?>

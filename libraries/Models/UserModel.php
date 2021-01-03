@@ -1,5 +1,4 @@
 <?php
-
 require_once('libraries/Utils/Database.php');
 require_once('libraries/Models/CoreModel.php');
 
@@ -32,7 +31,8 @@ class User extends CoreModel {
                                ':user_password'=>$this->getPassword(),
                                ':user_birthday'=>$this->getBirthday()
                                 ));
-            echo 'Vous avez été enregistré !(Redirection)';
+        $_SESSION['newUser'] = true;
+        header("Location:connexion.php");
             else:
                 echo 'Cette email existe déjà';
             endif;
@@ -56,13 +56,37 @@ class User extends CoreModel {
             if($final):
                 $_SESSION['isConnected'] = $final;
                 header("refresh:2 ;url='indexAccount.php'");
-                echo "Vous êtes connecté !";
+                echo '<div class="row" id="alert_box">
+                <div class="col s12 m12">
+                <div class="card green darken-1">
+                <div class="row">
+                        <div class="col s12 m10">
+                        <div class="card-content white-text">
+                        <p> Connexion reussie !</p>
+                        <div class="col s10 m2">
+                        <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>';
             return $final;
             else:
                 echo 'Données Invalides';
         endif; 
         }
-        
+
+        // public static function newUser(){
+        //     if (!empty($_SESSION['newUser'])){
+        //         $newUser = true;
+        //     } else {
+        //         $newUser = false;
+        //     }
+        //     return $newUser;
+        // }
+
         public static function isConnected(){
             if(!empty($_SESSION['isConnected'])){
                 $connected = true;
@@ -158,9 +182,31 @@ class User extends CoreModel {
                 $result2=$this->pdo->prepare($query2);
                 $result2->bindParam("user_password", $password, PDO::PARAM_STR);
                 $result2->execute();
-                echo 'Mot de passe changé';
+                echo '<div class="row" id="alert_box">
+        <div class="col s12 m12">
+        <div class="card green darken-1">
+        <div class="row">
+                <div class="col s12 m10">
+                <div class="card-content white-text">
+                <p>Votre mot de passe à été modifié avec succès !</p>
+                <div class="col s10 m2">
+                <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>
+        </div>
+        </div>
+        </div>';
             else:
-                echo 'Ancien mot de passe incorrecte';
+                echo '<div class="row" id="alert_box">
+        <div class="col s12 m12">
+        <div class="card red darken-1">
+        <div class="row">
+                <div class="col s12 m10">
+                <div class="card-content white-text">
+                <p>Ancien mot de passe incorrect !</p>
+                <div class="col s10 m2">
+                <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>
+        </div>
+        </div>
+        </div>';
             endif;
             
         }

@@ -5,9 +5,6 @@ require_once('libraries/autoload.php');
 
 user::secureAcces();
 
-echo 'Voici votre compte personel ' .$_SESSION['isConnected']['user_firstname'];
-var_dump($_SESSION);
-
 ?>
 <form class='' action="" method="post">
 <div class="container">
@@ -61,27 +58,45 @@ var_dump($_SESSION);
         </div>
     </div>
 </div>
-    <!-- <form class='' action="" method="post">
-	    <fieldset>
-        <legend>Change Mail</legend>
-		<p class="Old Email"><input type="email" name="OldEmail"placeholder="Old Email" required/></p>
-        <p class="New Email"><input type="email" name="NewEmail" placeholder="New Email" required/></p>
-        <p class="New Email"><input type="email" name="NewEmail2" placeholder="Confirm New Email" required/></p>
-
-    </fieldset>
-        <p class="Submit"><input type="submit" name="ConfirmMail" value="Confirm" /></p>
-    </form> -->
 
 <?php
     if(isset($_POST['ConfirmPw'])):
         if(empty($_POST['OldPassword']) || empty($_POST['NewPassword'])
         || empty($_POST['NewPassword2'])):
-          echo 'Vous avez oublié d\'écrire votre mot de passe et / ou de le confirmer';
+        echo '<div class="row" id="alert_box">
+        <div class="col s12 m12">
+        <div class="card red darken-1">
+        <div class="row">
+                <div class="col s12 m10">
+                <div class="card-content white-text">
+                <p>Veuillez remplir tous les champs !</p>
+                <div class="col s10 m2">
+                <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>
+        </div>
+        </div>
+        </div>';
         elseif($_POST['NewPassword'] != $_POST['NewPassword2']):
-          echo 'Les nouveaux mot de passe ne sont pas indentique';
+        echo '<div class="row" id="alert_box">
+        <div class="col s12 m12">
+        <div class="card red darken-1">
+        <div class="row">
+                <div class="col s12 m10">
+                <div class="card-content white-text">
+                <p>Les nouveaux mot de passe ne sont pas indentique !</p>
+                <div class="col s10 m2">
+                <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>';
+
         elseif(strlen($_POST['NewPassword']) < 6 || strtolower($_POST['NewPassword']) == ($_POST['NewPassword']) 
           || strtoupper($_POST['NewPassword']) == ($_POST['NewPassword'])):
-          echo 'Le mot de passe doit avoir au moins 6 caratères, une majuscule,une minuscule !';
+          echo '<div class="row" id="alert_box">
+        <div class="col s12 m12">
+        <div class="card red darken-1">
+        <div class="row">
+                <div class="col s12 m10">
+                <div class="card-content white-text">
+                <p>Le mot de passe doit avoir au moins 6 caratères, une majuscule,une minuscule !</p>
+                <div class="col s10 m2">
+                <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>';
         else:
            $user = new User;
            $user->changePassword($_SESSION['isConnected']['user_id'],$_POST['NewPassword'],$_POST['OldPassword']);
@@ -90,15 +105,49 @@ var_dump($_SESSION);
 
       if(isset($_POST['ConfirmMail'])):
         if(empty($_POST['OldEmail']) || empty($_POST['NewEmail']) || empty($_POST['NewEmail2'])):
-          echo 'Vous avez oublié d\'écrire votre email et / ou de le confirmer';
+        echo '<div class="row" id="alert_box">
+          <div class="col s12 m12">
+          <div class="card red darken-1">
+          <div class="row">
+                  <div class="col s12 m10">
+                  <div class="card-content white-text">
+                  <p>Veuillez remplir tous les champs</p>
+                  <div class="col s10 m2">
+                  <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>';
+
           elseif($_POST['NewEmail'] != $_POST['NewEmail2']):
-            echo 'Les nouveaux emails ne sont pas indentique';
+          echo '<div class="row" id="alert_box">
+            <div class="col s12 m12">
+            <div class="card red darken-1">
+            <div class="row">
+                    <div class="col s12 m10">
+                    <div class="card-content white-text">
+                    <p>Les nouveaux emails ne sont pas indentique !</p>
+                    <div class="col s10 m2">
+                    <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>';
+
             elseif($_POST['OldEmail'] != $_SESSION['isConnected']['user_email']):
-              echo 'Votre ancien email est incorrecte';          
+              echo '<div class="row" id="alert_box">
+              <div class="col s12 m12">
+              <div class="card red darken-1">
+              <div class="row">
+                      <div class="col s12 m10">
+                      <div class="card-content white-text">
+                      <p>Votre ancien email est incorrecte !</p>
+                      <div class="col s10 m2">
+                      <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>';
         else:
           $user = new User;
           $user->changeEmail($_SESSION['isConnected']['user_id'],$_POST['NewEmail']);
-          echo 'Vous avez changé votre email avec succès';
+          echo '<div class="row" id="alert_box">
+              <div class="col s12 m12">
+              <div class="card green darken-1">
+              <div class="row">
+                      <div class="col s12 m10">
+                      <div class="card-content white-text">
+                      <p>Vous avez changé votre email avec succès !</p>
+                      <div class="col s10 m2">
+                      <i class="fa fa-times icon_style" id="alert_close" aria-hidden="true"></i>';
       endif;
     endif;
 

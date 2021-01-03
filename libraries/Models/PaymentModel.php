@@ -4,12 +4,26 @@ require_once('libraries/Utils/Database.php');
 require_once('libraries/Models/CoreModel.php');
 
 
-class Payment{
+class Payment extends CoreModel {
 
     protected $id;
     protected $name;
-    protected $create_at;
-    protected $update_at;
+
+    public function selectPayment(){
+        $query = $this->pdo->query('SELECT payment_id, payment_type FROM payment ');
+        $result = $query->fetchALL(PDO::FETCH_ASSOC);
+        // var_dump($result);
+        // die();
+        foreach($result as $row => $element)
+        {
+            echo '<option value="'.$element['payment_id'].'">'.$element['payment_type'].'</option>';
+        }
+    }
+
+    public function setPaymentId($id){
+        $this->id=$id;
+        return $this->id;
+    }
 
     public function getPaymentId(){
         return $this->id;
